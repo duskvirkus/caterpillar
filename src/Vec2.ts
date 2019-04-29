@@ -8,4 +8,16 @@ export class Vec2 {
     this.y = y;
   }
 
+  public add(other: Vec2): void
+  public add(x: number, y: number): void
+  public add(xOrOther: number | Vec2, y?: number): void {
+    if (typeof xOrOther === 'number') {
+      this.x += xOrOther;
+      this.y += y;
+    } else {
+      this.x += xOrOther.x;
+      this.y += xOrOther.y;
+    }
+  }
+
 }

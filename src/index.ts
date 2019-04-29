@@ -1,5 +1,7 @@
-import { GraphicsTerminal, TerminalConfig, CharacterSet } from 'terminaltxt';
+import { GraphicsTerminal, TerminalConfig, CharacterSet, InputTracker, KeyEventType, KeyAction } from 'terminaltxt';
 import { Leaf } from './Leaf';
+import { Caterpillar } from './Caterpillar';
+import { Vec2 } from './Vec2';
 
 if (document.readyState === 'complete') {
   init();
@@ -8,7 +10,9 @@ if (document.readyState === 'complete') {
 }
 
 let term: GraphicsTerminal;
+let caterpillar: Caterpillar;
 let leaf: Leaf;
+let input: InputTracker;
 
 function init() {
   const charSet: CharacterSet = new CharacterSet(' OL█');
@@ -20,9 +24,51 @@ function init() {
     } as TerminalConfig, 
     charSet
   );
+  caterpillar = new Caterpillar(new Vec2(Math.floor(term.getWidth() / 2), Math.floor(term.getHeight() / 2)));
+  caterpillar.show(term);
+  setupInput();
   border();
   newLeaf();
   term.update();
+  loop();
+}
+
+function setupInput(): void {
+  input = new InputTracker();
+
+  input.addAction({
+    keys: ['ArrowUp'],
+    keyEventType: KeyEventType.KEYUP,
+    action: caterpillar.goNorth,
+  } as KeyAction);
+
+  input.addAction({
+    keys: ['ArrowRight'],
+    keyEventType: KeyEventType.KEYUP,
+    action: caterpillar.goEast,
+  } as KeyAction);
+
+  input.addAction({
+    keys: ['ArrowDown'],
+    keyEventType: KeyEventType.KEYUP,
+    action: caterpillar.goSouth,
+  } as KeyAction);
+
+  input.addAction({
+    keys: ['ArrowLeft'],
+    keyEventType: KeyEventType.KEYUP,
+    action: caterpillar.goWest,
+  } as KeyAction);
+
+}
+
+function loop(): void {
+  setTimeout(() => {
+    caterpillar.move();
+    caterpillar.show(term);
+    term.update();
+    loop();
+  }, 100);
 }
 
 function border() {
