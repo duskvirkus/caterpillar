@@ -1,21 +1,10 @@
 import { GraphicsTerminal, TerminalConfig, CharacterSet } from 'terminaltxt';
+import { Leaf } from './Leaf';
 
 if (document.readyState === 'complete') {
   init();
 } else {
   window.addEventListener('load', init, false);
-}
-
-class Leaf {
-
-  public col: number;
-  public row: number;
-
-  constructor(colMin: number, colMax: number, rowMin: number, rowMax: number) {
-    this.col = Math.round(Math.random() * (colMax - colMin) + colMin);
-    this.row = Math.round(Math.random() * (rowMax - rowMin) + rowMin);
-  }
-
 }
 
 let term: GraphicsTerminal;
@@ -49,6 +38,5 @@ function border() {
 
 function newLeaf() {
   leaf = new Leaf(1, term.getWidth() - 2, 1, term.getHeight() - 2);
-  console.log(leaf.col);
-  term.setCell(2, leaf.col, leaf.row);
+  term.setCell(2, leaf.pos.x, leaf.pos.y);
 }
