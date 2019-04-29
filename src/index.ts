@@ -2,6 +2,7 @@ import { GraphicsTerminal, TerminalConfig, CharacterSet, InputTracker, KeyEventT
 import { Leaf } from './Leaf';
 import { Caterpillar } from './Caterpillar';
 import { Vec2 } from './Vec2';
+import { map } from './Map';
 
 if (document.readyState === 'complete') {
   init();
@@ -15,22 +16,22 @@ let leaf: Leaf;
 let input: InputTracker;
 
 function init() {
-  const charSet: CharacterSet = new CharacterSet(' OL█');
+  const charSet: CharacterSet = new CharacterSet(' ○●■');
   term = new GraphicsTerminal(
     {
       container: document.getElementById('container'), 
-      width: 120, 
-      height: 40
+      width: 60, 
+      height: 60
     } as TerminalConfig, 
     charSet
   );
-  caterpillar = new Caterpillar(new Vec2(Math.floor(term.getWidth() / 2), Math.floor(term.getHeight() / 2)));
+  caterpillar = new Caterpillar(new Vec2(Math.floor(term.getWidth() / 2), Math.floor(term.getHeight() / 2)), 1);
   caterpillar.show(term);
   setupInput();
   border();
   newLeaf();
   term.update();
-  loop();
+  loop(120);
 }
 
 function setupInput(): void {
@@ -38,37 +39,41 @@ function setupInput(): void {
 
   input.addAction({
     keys: ['ArrowUp'],
-    keyEventType: KeyEventType.KEYUP,
+    keyEventType: KeyEventType.KEYDOWN,
     action: caterpillar.goNorth,
   } as KeyAction);
 
   input.addAction({
     keys: ['ArrowRight'],
-    keyEventType: KeyEventType.KEYUP,
+    keyEventType: KeyEventType.KEYDOWN,
     action: caterpillar.goEast,
   } as KeyAction);
 
   input.addAction({
     keys: ['ArrowDown'],
-    keyEventType: KeyEventType.KEYUP,
+    keyEventType: KeyEventType.KEYDOWN,
     action: caterpillar.goSouth,
   } as KeyAction);
 
   input.addAction({
     keys: ['ArrowLeft'],
-    keyEventType: KeyEventType.KEYUP,
+    keyEventType: KeyEventType.KEYDOWN,
     action: caterpillar.goWest,
   } as KeyAction);
 
 }
 
-function loop(): void {
+function loop(speed: number): void {
   setTimeout(() => {
     caterpillar.move();
     caterpillar.show(term);
-    term.update();
-    loop();
-  }, 100);
+    caterpillar.checkGrow(leaf, newLeaf);
+    caterpillar.checkEdges(term);
+    if (!caterpillar.dead) {
+      term.update();
+      loop(map(caterpillar.length, 2, 10, 120, 60));
+    }
+  }, speed);
 }
 
 function border() {
