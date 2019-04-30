@@ -101,6 +101,13 @@ export class Caterpillar {
     const head: Vec2 = this.body[this.body.length - 1];
     if (head.x <= 0 || head.x >= term.getWidth() - 1 || head.y <= 0 || head.y >= term.getHeight() - 1) {
       this.dead = true;
+      return;
+    }
+    for (let i: number = 0; i < this.body.length - 2; i++) {
+      if (head.x === this.body[i].x && head.y === this.body[i].y) {
+        this.dead = true;
+        return;
+      }
     }
   }
 

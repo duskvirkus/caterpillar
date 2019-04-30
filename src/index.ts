@@ -16,12 +16,12 @@ let leaf: Leaf;
 let input: InputTracker;
 
 function init() {
-  const charSet: CharacterSet = new CharacterSet(' ○●■');
+  const charSet: CharacterSet = new CharacterSet(' ○●║═╔╗╚╝'); //' ○●■''□● ■'
   term = new GraphicsTerminal(
     {
       container: document.getElementById('container'), 
-      width: 60, 
-      height: 60
+      width: 80, 
+      height: 25
     } as TerminalConfig, 
     charSet
   );
@@ -77,14 +77,18 @@ function loop(speed: number): void {
 }
 
 function border() {
-  for (let col: number = 0; col < term.getWidth(); col++) {
-    term.setCell(3, col, 0);
-    term.setCell(3, col, term.getHeight() - 1);
+  for (let col: number = 1; col < term.getWidth() - 1; col++) {
+    term.setCell(4, col, 0);
+    term.setCell(4, col, term.getHeight() - 1);
   }
-  for (let row: number = 0; row < term.getHeight(); row++) {
+  for (let row: number = 1; row < term.getHeight() - 1; row++) {
     term.setCell(3, 0, row);
     term.setCell(3, term.getWidth() - 1, row);
   }
+  term.setCell(5, 0, 0);
+  term.setCell(6, term.getWidth() - 1, 0);
+  term.setCell(7, 0, term.getHeight() - 1);
+  term.setCell(8, term.getWidth() - 1, term.getHeight() - 1);
 }
 
 function newLeaf() {

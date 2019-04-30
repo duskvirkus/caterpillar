@@ -1,6 +1,6 @@
 html, code {
-  letter-spacing: 0.1rem;
-  line-height: 0.55rem;
+  /* letter-spacing: 0.1rem;
+  line-height: 0.55rem; */
 }
 
 html, body {
@@ -9,6 +9,8 @@ html, body {
   background-color: black;
   color: white;
   height: 100%;
+  font-size: 3vh;
+  color: #6F6;
 }
 
 pre {
