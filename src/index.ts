@@ -1,4 +1,4 @@
-import { GraphicsTerminal, TerminalConfig, CharacterSet, InputTracker, KeyEventType, KeyAction } from 'terminaltxt';
+import { GraphicsTerminal, TerminalConfig, CharacterSet, InputTracker, KeyEventType, KeyAction, OutputTerminal } from 'terminaltxt';
 import { Leaf } from './Leaf';
 import { Caterpillar } from './Caterpillar';
 import { Vec2 } from './Vec2';
@@ -10,18 +10,31 @@ if (document.readyState === 'complete') {
   window.addEventListener('load', init, false);
 }
 
+let width: number;
+let output: OutputTerminal;
 let term: GraphicsTerminal;
 let caterpillar: Caterpillar;
 let leaf: Leaf;
 let input: InputTracker;
 
 function init() {
-  const charSet: CharacterSet = new CharacterSet(' ○●║═╔╗╚╝'); //' ○●■''□● ■'
+  width = 80;
+  output = new OutputTerminal(
+    {
+      container: document.getElementById('output-container'),
+      width: width,
+      height: 2,
+    } as TerminalConfig,
+    borderTop()
+  )
+  output.write(borderOutput('Caterpillar'));
+  //console.log(fitToWidth('Caterpillar'));
+  const charSet: CharacterSet = new CharacterSet(' ○●║═╠╣╚╝'); //' ○●■''□● ■'' ○●║═╔╗╚╝'
   term = new GraphicsTerminal(
     {
-      container: document.getElementById('container'), 
+      container: document.getElementById('game-container'), 
       width: 80, 
-      height: 25
+      height: 23
     } as TerminalConfig, 
     charSet
   );
@@ -94,4 +107,26 @@ function border() {
 function newLeaf() {
   leaf = new Leaf(1, term.getWidth() - 2, 1, term.getHeight() - 2);
   term.setCell(2, leaf.pos.x, leaf.pos.y);
+}
+
+function fitToWidth(text: string, width: number, fillChar: string = ' '): string {
+  let fillArray: string[] = [];
+  for (let i: number = 0; i < width - text.length; i++) {
+    fillArray.push(fillChar);
+  }
+  let fill: string = fillArray.join('');
+  return text + fill;
+}
+
+function borderOutput(text: string): string {
+  return '║' + fitToWidth(text, width - 2) + '║';
+}
+
+function borderTop(): string {
+  let fillArray: string[] = [];
+  for (let i: number = 0; i < width - 2; i++) {
+    fillArray.push('═');
+  }
+  let fill: string = fillArray.join('');
+  return '╔' + fill + '╗';
 }
