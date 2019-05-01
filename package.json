@@ -3,7 +3,11 @@
   "version": "0.0.1",
   "description": "Clone of Snake game made in TerminalTXT.",
   "scripts": {
-    "start": "parcel server ./src/index.html"
+    "start": "parcel server ./src/index.html",
+    "404": "parcel ./src/404.html",
+    "build": "rm -rf dist && parcel build ./src/index.html ./src/404.html --public-url /caterpillar",
+    "deploy": "gh-pages -d ./dist",
+    "build-deploy": "npm run build && npm run deploy"
   },
   "author": "Fi Graham",
   "license": "MIT",
@@ -11,6 +15,7 @@
     "terminaltxt": "0.0.5"
   },
   "devDependencies": {
+    "gh-pages": "^2.0.1",
     "parcel": "^1.12.3",
     "typescript": "^3.4.5"
   }
