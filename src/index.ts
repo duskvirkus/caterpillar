@@ -54,7 +54,7 @@ function beginGame(): void {
       width: 80, 
       height: 23
     } as TerminalConfig, 
-    new CharacterSet(' ○●║═╔╗╚╝'),
+    new CharacterSet(' ○●║═╔╗╚╝'),
   );
   newGame();
   loop(120);
@@ -167,7 +167,7 @@ function loop(speed: number): void {
   }, speed);
 }
 
-function fitToWidth(text: string, width: number, fillChar: string = ' '): string {
+function fitToWidth(text: string, width: number, fillChar: string = ' '): string {
   let fillArray: string[] = [];
   for (let i: number = 0; i < width - text.length; i++) {
     fillArray.push(fillChar);
