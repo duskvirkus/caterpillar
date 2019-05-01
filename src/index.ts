@@ -17,6 +17,7 @@ let term: GraphicsTerminal;
 let caterpillar: Caterpillar;
 let leaf: Leaf;
 let input: InputTracker;
+let characters: string = '─━│┃┄┅┆┇┈┉┊┋┌┍┎┏┐┑┒┓└┕┖┗┘┙┚┛├┝┞┟┠┡┢┣┤┥┦┧┨┩┪┫┬┭┮┯┰┱┲┳┴┵┶┷┸┹┺┻┼┽┾┿╀╁╂╃╄╅╆╇╈╉╊╋╌╍╎╏═║╒╓╔╕╖╗╘╙╚╛╜╝╞╟╠╡╢╣╤╥╦╧╨╩╪╫╬╭╮╯╰╱╲╳╴╵╶╷╸╹╺╻╼╽╾╿';
 
 function init() {
   input = new InputTracker();
@@ -51,13 +52,25 @@ function beginGame(): void {
   term = new GraphicsTerminal(
     {
       container: document.getElementById('game-container'), 
-      width: 80, 
-      height: 23
+      width: 50, 
+      height: 25
     } as TerminalConfig, 
-    new CharacterSet(' ○●║═╔╗╚╝'),
+    new CharacterSet('╔○ ●║═╗╚╝'),
   );
+  shuffle();
   newGame();
   loop(120);
+}
+
+function shuffle() {
+  let arr: string[] = characters.split('');
+  for (let i = arr.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  const charSet = new CharacterSet(arr.join(''));
+  // @ts-ignore
+  term.characterSet = charSet;
 }
 
 function newGame(): void {
@@ -121,6 +134,12 @@ function userControls(): void {
   input = new InputTracker();
 
   input.addAction({
+    keys: ['ArrowUp', 'ArrowRight', 'ArrowLeft', 'ArrowDown'],
+    keyEventType: KeyEventType.KEYDOWN,
+    action: shuffle,
+  } as KeyAction);
+
+  input.addAction({
     keys: ['ArrowUp'],
     keyEventType: KeyEventType.KEYDOWN,
     action: caterpillar.goNorth,
@@ -157,13 +176,13 @@ function loop(speed: number): void {
     if (!caterpillar.dead) {
       caterpillar.move();
       caterpillar.show(term);
-      caterpillar.checkGrow(leaf, newLeaf);
+      //caterpillar.checkGrow(leaf, newLeaf);
       caterpillar.checkEdges(term);
     }
     if (!caterpillar.dead) {
       term.update();
     }
-    loop(map(caterpillar.length, 2, 10, 120, 60));
+    loop(map(caterpillar.length, 2, 10, 80, 60));
   }, speed);
 }
 
