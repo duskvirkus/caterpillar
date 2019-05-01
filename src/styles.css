@@ -12,6 +12,10 @@ pre {
   margin: 0;
 }
 
+a, a:hover, a:visited {
+  color: #6F6;
+}
+
 .flex-center {
   display: flex;
   align-items: center;
