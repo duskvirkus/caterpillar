@@ -3,6 +3,8 @@ import { GraphicsTerminal } from "terminaltxt";
 import { Direction } from "./Direction";
 import { Leaf } from "./Leaf";
 
+type newLeafFunction = (caterpillar: Caterpillar) => void;
+
 export class Caterpillar {
 
   public body: Vec2[] = []; // 0 is the tail, end is the head
@@ -89,11 +91,11 @@ export class Caterpillar {
     }
   }
 
-  public checkGrow(leaf: Leaf, newLeaf: Function) {
+  public checkGrow(leaf: Leaf, newLeaf: newLeafFunction) {
     if (leaf.pos.x === this.body[this.body.length - 1].x
       && leaf.pos.y === this.body[this.body.length - 1].y) {
       this.grow();
-      newLeaf();
+      newLeaf(this);
     }
   }
 

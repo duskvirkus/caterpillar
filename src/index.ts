@@ -63,7 +63,7 @@ function beginGame(): void {
 function newGame(): void {
   clearTerminal();
   newCaterpillar();
-  newLeaf();
+  newLeaf(caterpillar);
   border();
   term.update();
   userControls();
@@ -92,13 +92,22 @@ function border() {
   term.setCell(8, term.getWidth() - 1, term.getHeight() - 1);
 }
 
-function newCaterpillar() {
+function newCaterpillar(): void {
   caterpillar = new Caterpillar(new Vec2(Math.floor(WIDTH / 2), Math.floor(HEIGHT / 2)), 1);
   caterpillar.show(term);
 }
 
-function newLeaf() {
-  leaf = new Leaf(1, term.getWidth() - 2, 1, term.getHeight() - 2);
+function newLeaf(caterpillar: Caterpillar): void {
+  let overlapping: boolean = false;
+  do {
+    leaf = new Leaf(1, term.getWidth() - 2, 1, term.getHeight() - 2);
+    for (let i: number = 0; i < caterpillar.body.length; i++) {
+      if (leaf.pos.x === caterpillar.body[i].x && leaf.pos.y === caterpillar.body[i].y) {
+        overlapping = true;
+        break;
+      }
+    }
+  } while(overlapping);
   term.setCell(2, leaf.pos.x, leaf.pos.y);
 }
 
