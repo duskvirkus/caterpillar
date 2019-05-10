@@ -52,7 +52,7 @@ function beginGame(): void {
     {
       container: document.getElementById('game-container'), 
       width: 80, 
-      height: 23
+      height: 25
     } as TerminalConfig, 
     new CharacterSet(' ○●║═╔╗╚╝'),
   );
@@ -163,7 +163,7 @@ function loop(speed: number): void {
     if (!caterpillar.dead) {
       term.update();
     }
-    loop(map(caterpillar.length, 2, 10, 120, 60));
+    loop(map(caterpillar.length, 2, 10, 80, 60));
   }, speed);
 }
 

@@ -5,9 +5,7 @@
   "scripts": {
     "start": "parcel server ./src/index.html",
     "404": "parcel ./src/404.html",
-    "build": "rm -rf dist && parcel build ./src/index.html ./src/404.html --public-url /caterpillar",
-    "deploy": "gh-pages -d ./dist",
-    "build-deploy": "npm run build && npm run deploy"
+    "build": "rm -rf build && parcel build ./src/index.html ./src/404.html --public-url / --out-dir build"
   },
   "author": "Fi Graham",
   "license": "MIT",
